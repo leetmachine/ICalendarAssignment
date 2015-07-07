@@ -9,7 +9,8 @@ public class EventCreator {
 
 
 //method for prompting user for information for new event
-public static void makeEvent() {
+	//NOTE: geoPosition and Classification are optional fields that may be passed in as "". Must handle with and IF statement.
+public static void makeEvent(String eventSummary, String timeStart, String timeEnd, String dateStart, String dateEnd, String location, String geoPosition, String classification) {
 	System.out.println("Creating new event, please enter information below");
 	
 	//writes new file to user home folder, on mac this is HD/Users/"username"
@@ -61,6 +62,7 @@ public static void makeEvent() {
 		
 		
 		bufferedWriter.close();
+		System.out.println("File Saved.");
 		
 	} catch (IOException e) {
 		System.out.println("Error Writing to file newEvent.ics");
@@ -73,7 +75,7 @@ public static void makeEvent() {
 }
 
 
-/*WORKING DRAG AND DROP FILE.
+/*WORKING DRAG AND DROP CODE. Remove all other, place into try block.
 bufferedWriter.write("BEGIN:VCALENDAR\n");
 bufferedWriter.write("VERSION:2.0\n");
 bufferedWriter.write("CALSCALE:GREGORIAN\n");
