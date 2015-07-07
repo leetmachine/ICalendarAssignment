@@ -1,4 +1,4 @@
-//Keegan Gladstone
+//TEAM ANDRASTE ICS314 ICALENDAR PROJECT
 //Main, Holds JavaFX interface
 import javafx.scene.layout.FlowPane;
 import javafx.application.Application;

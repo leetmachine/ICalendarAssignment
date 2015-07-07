@@ -4,10 +4,11 @@ Please update this as you commit changes.
 File Structure:
 	ICalendar.java holds the JavaFX user interface.
 	EventCreator.java holds the makeEvent method, which takes in user-given variables. It then converts the variables to the proper format and writes the .ics file.
+	Because the .ics file is all text, every variable is a String type, so we can easily combine things, and write them to then file.
 		Variables defined in the instructions for the first deliverable are:
 			1. eventSummary: which is the "title" of the event. ex: "Study for exam"
-			2. timeStart: which is the start time of the event. ex: "1pm"
-			3. timeEnd: which is the end time of the event. ex: "2pm"
+			2. timeStart: which is the start time of the event. ex: "1pm", maybe change this to a dropdown menu of times?
+			3. timeEnd: which is the end time of the event. ex: "2pm", maybe change this to a dropdown menu of times?
 			4. dateStart: the start date of the event, must be given in D/M/Y format. ex: "12 August 2015"
 			5. location: the location of the event. ex: "Hamilton Library"
 		Optional fields:
@@ -38,6 +39,14 @@ What we have so far (07/07/15 10am):
 			
 			^the format is "TIMEZONE: YEAR + MONTH + DAY + T + STARTTIME"
 			follow similar format for DTEND.
+	
+	Must also figure out how to convert the timezone given as "HST", and set it as example: TZID=Pacific/Honolulu. This goes onto DTEND and DTSTART.
+	Maybe we should add a drop down menu of known timezones so it's easier to handle?
+	
+		as ex:
+		
+		 DTSTART;TZID=Pacific/Honolulu:20150705T091500
+			
 	
 	
 	
