@@ -1,0 +1,43 @@
+App Documentation:
+Please update this as you commit changes.
+
+File Structure:
+	ICalendar.java holds the JavaFX user interface.
+	EventCreator.java holds the makeEvent method, which takes in user-given variables. It then converts the variables to the proper format and writes the .ics file.
+		Variables defined in the instructions for the first deliverable are:
+			1. eventSummary: which is the "title" of the event. ex: "Study for exam"
+			2. timeStart: which is the start time of the event. ex: "1pm"
+			3. timeEnd: which is the end time of the event. ex: "2pm"
+			4. dateStart: the start date of the event, must be given in D/M/Y format. ex: "12 August 2015"
+			5. location: the location of the event. ex: "Hamilton Library"
+		Optional fields:
+			Optional fields are String variables initialized to "".
+			They must be handled with an If-Else statement in the makeEvent method. If it remains empty, that line should not be written to the .ics file.
+			Optional variables are:
+				6. geoPosition: given as a string of a Latitude and Longitude pair separated by a ";". 
+				7. classification: a string classification.
+				
+
+
+What we have so far (07/07/15 10am):
+	On start, our app opens a window prompting the user to fill out a form of required and optional textfields.
+	When they are done, they press the save button.
+	Clicking the save button starts the following sequence:
+		1.All textfields run through ...getText()
+		2. The makeEvent method in the EventCreator class is called, passing all the parameters gathered in step 1.
+		3. The makeEvent method writes the file line by line, placing in the appropriate parameter where told to.
+		4. makeEvent writes to the console when finished, and then file is saved.
+
+
+
+
+*TO-DO:
+	Convert timeStart and dateStart into the .ics file format for the DTSTART line. (Similar must be done for DTEND line).
+		.ics file format lumps the date and time together in one chain like:
+			DTSTART; TZID=Pacific/Honolulu:20150705T091500
+			
+			^the format is "TIMEZONE: YEAR + MONTH + DAY + T + STARTTIME"
+			follow similar format for DTEND.
+	
+	
+	
