@@ -18,7 +18,7 @@ import javafx.geometry.Pos;
 public class ICalendar extends Application {
 	
 	//application label
-	Label label = new Label("Team Andraste Event Application");
+	Label label = new Label("Team Adrastea Event Application");
 	
 	//name of event
 	Label labelEventSummary = new Label("Enter event title:");
@@ -26,14 +26,14 @@ public class ICalendar extends Application {
 	
 	//Start time of event selector
 	TextField startTime = new TextField("");
-	Label labelTimeStart = new Label("Enter start time as hour and minute, select period");
+	Label labelTimeStart = new Label("Enter 4-digit start time and select the period");
 	/*ChoiceBox timeStartBox = new ChoiceBox(FXCollections.observableArrayList(
 			"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));*/
 	ChoiceBox<String> periodStartBox = new ChoiceBox<String>(FXCollections.observableArrayList(
 			"am","pm"));
 	
 	//End time of event	selector
-	Label labelEndTime = new Label("Enter end time as hour and minute, select period");
+	Label labelEndTime = new Label("Enter 4-digit end time and select the period");
 	TextField endTime = new TextField("");
 	/*ChoiceBox timeEndBox = new ChoiceBox(FXCollections.observableArrayList(
 			"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));*/
@@ -70,7 +70,10 @@ public class ICalendar extends Application {
 	TextField geoPosition = new TextField("");
 	//Classification field (optional, must be supported)
 	Label labelClassification = new Label("Select classification");
-	TextField classification = new TextField("");
+	ChoiceBox<String> classification = new ChoiceBox<String>(FXCollections.observableArrayList(
+			"PUBLIC", "PRIVATE", "CONFIDENTIAL"));
+	
+	//TextField classification = new TextField("");
 
 	//save button
 	Button saveButton = new Button("save");
@@ -90,14 +93,16 @@ public class ICalendar extends Application {
 		eventSummary.setMaxWidth(Double.MAX_VALUE);
 			eventSummary.setPromptText("event title");
 		startTime.setMaxWidth(Double.MAX_VALUE);
-			startTime.setPromptText("enter start time of event, hour/period");
+			startTime.setPromptText("0000");
+		endTime.setMaxWidth(Double.MAX_VALUE);
+			endTime.setPromptText("0000");
 		location.setMaxWidth(Double.MAX_VALUE);
 			location.setPromptText("location");
 		optional.setMaxWidth(Double.MAX_VALUE);
 		geoPosition.setMaxWidth(Double.MAX_VALUE);
-			geoPosition.setPromptText("enter coordinates as Latitude, Longitude");
+			geoPosition.setPromptText("Latitude;Longitude");
 		classification.setMaxWidth(Double.MAX_VALUE);
-			classification.setPromptText("classification");
+			classification.getSelectionModel().selectFirst();
 		saveButton.setMaxWidth(Double.MAX_VALUE);
 		
 		
@@ -158,7 +163,7 @@ public class ICalendar extends Application {
 				String saveTimeEnd = EndTimeConverter();
 				String saveLocation = location.getText();
 				String saveGeoPosition = geoPosition.getText();
-				String saveClassification = classification.getText();
+				String saveClassification = classification.getValue();
 				
 
 				
@@ -173,23 +178,40 @@ public class ICalendar extends Application {
 	
 	//converts start time to DTSTART format
 	private String StartTimeConverter() {
-	 String date = startYear.getText() + (String) monthStartBox.getValue() + (String) dayStartBox.getValue(); 
-	 String hour = startTime.getText();
-	 String time = ("TZID=Pacific/Honolulu:" + date + "T" + hour + "00");
-	 System.out.println(time);
-		return time;
+		 String date = startYear.getText() + (String) monthStartBox.getValue() + (String) dayStartBox.getValue(); 
+		 String hour = startTime.getText();
+		 
+		 if (periodStartBox.getValue() == "pm") {
+			 System.out.println("period start box if-statement entered.");
+			 int intHour = Integer.parseInt(hour) + 1200;
+			 System.out.println("hour changed to" + intHour);
+			 hour = Integer.toString(intHour);
+		 }
+		 	
+		 String time = ("TZID=Pacific/Honolulu:" + date + "T" + hour + "00");
+		 System.out.println(time);
+			return time;
 	}
+	
+	
 	
 	//converts end time to DTEND format
 	private String EndTimeConverter() {
 		String date = endYear.getText() + (String) monthEndBox.getValue() + (String) dayEndBox.getValue(); 
 		 String hour = endTime.getText();
+		 
+		 if (periodEndBox.getValue() == "pm") {
+			 System.out.println("period end box if-statement entered.");
+			 int intHour = Integer.parseInt(hour) + 1200;
+			 System.out.println("hour changed to" + intHour);
+			 hour = Integer.toString(intHour);
+		 }
 		 String time = ("TZID=Pacific/Honolulu:" +date + "T" + hour + "00");
 		 System.out.println(time);
 			return time;
 	}
 	
-
+	
 	
 	
 	

@@ -11,34 +11,34 @@ public class EventCreator {
 //method for prompting user for information for new event
 	//NOTE: geoPosition and Classification are optional fields that may be passed in as "". Must handle with and IF statement.
 public static void makeEvent(String eventSummary, String timeStart, String timeEnd, String location, String geoPosition, String classification) {
-	System.out.println("Creating new event, please enter information below");
 	
 	//writes new file to user home folder, on mac this is HD/Users/"username"
 	try {
 		String filename = (eventSummary +".ics");
+		System.out.println(filename);
 		String userHomeFolder = System.getProperty("user.home");
-		File icsFile = new File(userHomeFolder, "filename");
+		File icsFile = new File(userHomeFolder, filename);
 		FileWriter fileWriter = new FileWriter(icsFile);
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 		
-		//This info is from the file created by the real iCal app. Need to add more variables for user functionality in our app.
+		//Write to file
 		bufferedWriter.write("BEGIN:VCALENDAR\n");
 		bufferedWriter.write("VERSION:2.0\n");
 		bufferedWriter.write("CALSCALE:GREGORIAN\n");
 		bufferedWriter.write("BEGIN:VEVENT\n");
 		bufferedWriter.write("CREATED:20150705T234637Z\n");
-		//edit below
-		//bufferedWriter.write("DTEND;TZID=Pacific/Honolulu:20150705T101500\n");
-		bufferedWriter.write("DTEND;" +timeStart+ "\n");
+		bufferedWriter.write("DTEND;" + timeEnd + "\n");
 		bufferedWriter.write("TRANSP:OPAQUE\n");
-		
-		bufferedWriter.write("SUMMARY:" +eventSummary  +"\n");
-		
-		//edit below
-		bufferedWriter.write("DTSTART;"+ timeEnd + "\n");
-		
-		//edit below and append for geo tag
+		bufferedWriter.write("SUMMARY:" + eventSummary  +"\n");
+		bufferedWriter.write("CLASS:" + classification +"\n");
+		bufferedWriter.write("DTSTART;"+ timeStart + "\n");
 		bufferedWriter.write("LOCATION:" + location + "\n");
+		
+		//check for geoPosition text
+		if (geoPosition != "") {
+				bufferedWriter.write("GEO:"+ geoPosition + "\n");	
+		}
+		
 		bufferedWriter.write("DESCRIPTION:\n");
 		bufferedWriter.write("END:VEVENT\n");
 		bufferedWriter.write("END:VCALENDAR\n");
@@ -47,6 +47,7 @@ public static void makeEvent(String eventSummary, String timeStart, String timeE
 		
 		bufferedWriter.close();
 		System.out.println("File Saved.");
+		System.out.println(icsFile.getAbsolutePath());
 		
 	} catch (IOException e) {
 		System.out.println("Error Writing to file newEvent.ics");
