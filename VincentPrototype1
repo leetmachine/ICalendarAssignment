@@ -1,0 +1,53 @@
+Enter file contents hereimport java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class iCalendar {
+	
+	//Standard structure of the 
+	private String beginCal = "BEGIN:VCALENDAR\r\n";
+	private String endCal = "END:VCALENDAR\r\n";
+	private String version = "VERSION:2.0 \r\n";
+	private String prodid = "";
+	private String beginEvent = "BEGIN:VEVENT\r\n";
+	private String endEvent = "END:VEVENT\r\n";
+
+	//Access classification strings, available for choosing and optional
+	private String classPublic = "CLASS:PUBLIC";
+	private String classPrivate = "CLASS:PRIVATE";
+	private String classConfidential = "CLASS:CONFIDENTIAL";
+	
+	//Geographic location, optional field
+	private String geog;
+	
+	public void iCalendar() {
+		
+	}
+
+	public void writeFile(String name) {
+	
+		StringBuilder fileName = new StringBuilder();
+		builder.append(name);
+		builder.append(".ics");
+		
+		try {
+			
+			File newFile = new File(builder.toString());
+			if(!file.exists) {
+				file.createNewFile();
+			}
+			
+			FileWriter fWrite = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bWrite = new BufferedWriter(fWrite);
+			bWrite.write(beginCal);
+			bWrite.write(version);
+			bWrite.write(prodid);
+			bWrite.write(beginEvent);
+			bWrite.write();
+			
+		}
+	
+	}
+
+}
