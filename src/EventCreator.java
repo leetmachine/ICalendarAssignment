@@ -10,13 +10,14 @@ public class EventCreator {
 
 //method for prompting user for information for new event
 	//NOTE: geoPosition and Classification are optional fields that may be passed in as "". Must handle with and IF statement.
-public static void makeEvent(String eventSummary, String timeStart, String timeEnd, String dateStart, String dateEnd, String location, String geoPosition, String classification) {
+public static void makeEvent(String eventSummary, String timeStart, String timeEnd, String location, String geoPosition, String classification) {
 	System.out.println("Creating new event, please enter information below");
 	
 	//writes new file to user home folder, on mac this is HD/Users/"username"
 	try {
+		String filename = (eventSummary +".ics");
 		String userHomeFolder = System.getProperty("user.home");
-		File icsFile = new File(userHomeFolder, "newEvent.ics");
+		File icsFile = new File(userHomeFolder, "filename");
 		FileWriter fileWriter = new FileWriter(icsFile);
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 		
@@ -26,14 +27,18 @@ public static void makeEvent(String eventSummary, String timeStart, String timeE
 		bufferedWriter.write("CALSCALE:GREGORIAN\n");
 		bufferedWriter.write("BEGIN:VEVENT\n");
 		bufferedWriter.write("CREATED:20150705T234637Z\n");
-		bufferedWriter.write("DTEND;TZID=Pacific/Honolulu:20150705T101500\n");
+		//edit below
+		//bufferedWriter.write("DTEND;TZID=Pacific/Honolulu:20150705T101500\n");
+		bufferedWriter.write("DTEND;" +timeStart+ "\n");
 		bufferedWriter.write("TRANSP:OPAQUE\n");
-		bufferedWriter.write("SUMMARY:iCalendar first deliverable due\n");
-		bufferedWriter.write("DTSTART;TZID=Pacific/Honolulu:20150705T091500\n");
-		bufferedWriter.write("LOCATION:University of Hawaiʻi at Mānoa\n2500 Campus Rd\nHonolulu HI 96822"
-					+ "X-APPLE-STRUCTURED-LOCATION;VALUE=URI;X-ADDRESS=2500 Campus Rd\\nHonolulu HI 96822;"
-					+ "X-APPLE-RADIUS=103.6942387013834;X-TITLE=University of Hawaiʻi at Mānoa:"
-					+ "geo:21.298121,-157.818711\n");
+		
+		bufferedWriter.write("SUMMARY:" +eventSummary  +"\n");
+		
+		//edit below
+		bufferedWriter.write("DTSTART;"+ timeEnd + "\n");
+		
+		//edit below and append for geo tag
+		bufferedWriter.write("LOCATION:" + location + "\n");
 		bufferedWriter.write("DESCRIPTION:\n");
 		bufferedWriter.write("END:VEVENT\n");
 		bufferedWriter.write("END:VCALENDAR\n");
@@ -47,10 +52,10 @@ public static void makeEvent(String eventSummary, String timeStart, String timeE
 		System.out.println("Error Writing to file newEvent.ics");
 		e.printStackTrace();
 	}
-
-	
+		
 	
 }
+
 
 
 }
