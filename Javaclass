@@ -1,0 +1,63 @@
+import java.util.Scanner;
+
+
+public class Appointment {
+public String event = null;
+public int time = 0;
+public int date = 0;
+public String location = null;
+Scanner input = new Scanner(System.in);
+
+public Appointment(String event, int time, int date){
+	super();
+	this.setEvent(event);
+	this.setTime(time);
+	this.setDate(date);
+	System.out.print("If you know the geographic location of the event, type and submit?");
+	String givenLocation = input.nextLine();
+	givenLocation = this.location;
+	}
+//this method creates an appointment only if the user inputs the event, time and date. 
+//It then asks the user if they know the geographic location of the event.(optional)
+
+//We would need to transfer this information to our calendaring system.(.ics file)
+//I honestly dont know how at this point. Ill do some research and get back to you guys unless you guys already know how to
+
+public String getEvent() {
+	return this.event;
+}
+
+public void setEvent(String event) {
+	this.event = event;
+}
+
+public int getTime() {
+	return this.time;
+}
+
+public void setTime(int time) {
+	this.time = time;
+}
+
+public int getDate() {
+	return this.date;
+}
+
+public void setDate(int date) {
+	this.date = date;
+}
+
+@Override
+public String toString() {
+	return "Appointment [event=" + event + ", time=" + time + ", date=" + date
+			+ ", location=" + location + ", input=" + input + "]";
+}
+
+public String getLocation() {
+	return this.location;
+}
+
+public void setLocation(String location) {
+	this.location = location;
+}
+}
