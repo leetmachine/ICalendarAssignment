@@ -38,7 +38,8 @@ public static void makeEvent(String eventSummary, String timeStart, String timeE
 		if (geoPosition != "") {
 				bufferedWriter.write("GEO:"+ geoPosition + "\n");	
 		}
-		
+		//Place great circle distance below after COMMENT:
+		bufferedWriter.write("COMMENT:\n");
 		bufferedWriter.write("DESCRIPTION:\n");
 		bufferedWriter.write("END:VEVENT\n");
 		bufferedWriter.write("END:VCALENDAR\n");

@@ -26,11 +26,14 @@ public class ICalendar extends Application {
 	
 	//Start time of event selector
 	TextField startTime = new TextField("");
-	Label labelTimeStart = new Label("Enter 4-digit start time and select the period");
+	Label labelTimeStart = new Label("Enter 4-digit start time and select the period and the timezone");
 	/*ChoiceBox timeStartBox = new ChoiceBox(FXCollections.observableArrayList(
 			"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));*/
 	ChoiceBox<String> periodStartBox = new ChoiceBox<String>(FXCollections.observableArrayList(
 			"am","pm"));
+	ChoiceBox<String> timezoneBox = new ChoiceBox<String>(FXCollections.observableArrayList(
+			"UTC", "EDT","CDT","MDT","PDT","AKDT","HST"));
+	
 	
 	//End time of event	selector
 	Label labelEndTime = new Label("Enter 4-digit end time and select the period");
@@ -108,7 +111,7 @@ public class ICalendar extends Application {
 		
 		//Dropdowns for start time selector
 		HBox startTimeBox = new HBox();
-		startTimeBox.getChildren().addAll(startTime, periodStartBox);
+		startTimeBox.getChildren().addAll(startTime, periodStartBox, timezoneBox);
 		
 		
 		//dropdowns for end time selector
@@ -153,7 +156,8 @@ public class ICalendar extends Application {
 		
 	}
 	
-	//BUTTON HANDLER, when "save" is pressed, this controls what happens.
+	/*BUTTON HANDLER, when "save" is pressed, this gathers all of the data in the fields
+	 runs the converter methods below, and calls the makeEvent method which writes it all to the file*/
 	private class ButtonHandler implements EventHandler<ActionEvent> {
 		public void handle (ActionEvent ae) {
 			if (ae.getSource() == saveButton) {
@@ -178,6 +182,7 @@ public class ICalendar extends Application {
 	
 	//converts start time to DTSTART format
 	private String StartTimeConverter() {
+		String saveTZID = timezoneConverter();
 		 String date = startYear.getText() + (String) monthStartBox.getValue() + (String) dayStartBox.getValue(); 
 		 String hour = startTime.getText();
 		 
@@ -188,7 +193,7 @@ public class ICalendar extends Application {
 			 hour = Integer.toString(intHour);
 		 }
 		 	
-		 String time = ("TZID=Pacific/Honolulu:" + date + "T" + hour + "00");
+		 String time = ("TZID="+ saveTZID + date + "T" + hour + "00");
 		 System.out.println(time);
 			return time;
 	}
@@ -197,6 +202,7 @@ public class ICalendar extends Application {
 	
 	//converts end time to DTEND format
 	private String EndTimeConverter() {
+		String saveTZID = timezoneConverter();
 		String date = endYear.getText() + (String) monthEndBox.getValue() + (String) dayEndBox.getValue(); 
 		 String hour = endTime.getText();
 		 
@@ -206,9 +212,36 @@ public class ICalendar extends Application {
 			 System.out.println("hour changed to" + intHour);
 			 hour = Integer.toString(intHour);
 		 }
-		 String time = ("TZID=Pacific/Honolulu:" +date + "T" + hour + "00");
+		 String time = ("TZID="+ saveTZID +date + "T" + hour + "00");
 		 System.out.println(time);
 			return time;
+	}
+	
+	
+	//Converts the timezone abreviation into the usable TZID string for the time formatted.
+	private String timezoneConverter() {
+		String timezoneCode = (String) timezoneBox.getValue();
+		String tzid = null;
+		
+		switch (timezoneCode) {
+			case "UTC": tzid = "Africa/Morocco:";
+				break;
+			case "EDT": tzid = "America/New_York:";
+				break;
+			case "CDT": tzid = "America/Kansas_City:";
+				break;
+			case "MDT": tzid = "America/Denver:";
+				break;
+			case "PDT": tzid = "America/Los_Angeles:";
+				break;
+			case "AKDT": tzid = "America/Fairbanks:";
+				break;
+			case "HST": tzid = "Pacific/Honolulu:";
+				break;
+		}
+		
+		System.out.println(tzid);
+		return tzid;
 	}
 	
 	

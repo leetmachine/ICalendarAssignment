@@ -25,27 +25,50 @@ What we have so far (07/07/15 10am):
 	When they are done, they press the save button.
 	Clicking the save button starts the following sequence:
 		1.All textfields run through ...getText()
+		1b. StartTimeConverter, EndTimeConverter, and timezoneConverter are called in the ICalendar.java class.
 		2. The makeEvent method in the EventCreator class is called, passing all the parameters gathered in step 1.
 		3. The makeEvent method writes the file line by line, placing in the appropriate parameter where told to.
 		4. makeEvent writes to the console when finished, and then file is saved.
 
+TO-DO's:
+	Systematic testing:
+	1.write jUnit Tests
+	
+	SORT arbitrary # of events on "start time": {
+	2.Make method to read in files of the same date
+	3.Make method to grab DTSTART from each file
+	4.Make method to delim DTSTART to get "start time"
+	5.Make method to sort event dates on "start time" }
+	
+	
+	Compute great circle distance:
+	6.
+	7.
+	8.
+	9.
+	10.
 
 
 
-*TO-DO:
+
+~~~OTHER~~~
+TIME FORMAT:
 	Convert timeStart and dateStart into the .ics file format for the DTSTART line. (Similar must be done for DTEND line).
 		.ics file format lumps the date and time together in one chain like:
 			DTSTART; TZID=Pacific/Honolulu:20150705T091500
 			
 			^the format is "TIMEZONE: YEAR + MONTH + DAY + T + STARTTIME"
 			follow similar format for DTEND.
+
+TIMEZONE'S:
+UTC: Africa/Morocco
+EDT: America/New_York
+CDT: America/Kansas_City
+MDT: America/Denver
+PDT: America/Los_Angeles
+AKDT: America/Fairbanks
+HST: Pacific/Honolulu
 	
-	Must also figure out how to convert the timezone given as "HST", and set it as example: TZID=Pacific/Honolulu. This goes onto DTEND and DTSTART.
-	Maybe we should add a drop down menu of known timezones so it's easier to handle?
-	
-		as ex:
-		
-		 DTSTART;TZID=Pacific/Honolulu:20150705T091500
 			
 	
 	
