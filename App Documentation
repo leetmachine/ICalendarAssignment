@@ -1,3 +1,8 @@
+**NOTE!!!
+The file reader is working, but may be hardcoded to my computer. I was having trouble implementing a fileChooser that prompts you to select a file.
+Anyway, the location of my folder is working with "Userhome+ /Desktop/OurCalendarEvents/"
+It should work on your mac if you also create a folder called OurCalendarEvents on your desktop.
+
 App Documentation:
 Please update this as you commit changes.
 
@@ -20,8 +25,8 @@ File Structure:
 				
 
 
-What we have so far (07/07/15 10am):
-	On start, our app opens a window prompting the user to fill out a form of required and optional textfields.
+What we have so far (07/14/15 10am):
+	On start, our app opens a window prompting the user to fill out a form of required and optional textfields, and dropdown menu's.
 	When they are done, they press the save button.
 	Clicking the save button starts the following sequence:
 		1.All textfields run through ...getText()
@@ -42,7 +47,7 @@ TO-DO's:
 	
 	
 	Compute great circle distance:
-	6.
+	6.Compute great circle distance of N+1 to N+2, and write that in the "comment" section of event N+1.
 	7.
 	8.
 	9.

@@ -17,7 +17,8 @@ public static void makeEvent(String eventSummary, String timeStart, String timeE
 		String filename = (eventSummary +".ics");
 		System.out.println(filename);
 		String userHomeFolder = System.getProperty("user.home");
-		File icsFile = new File(userHomeFolder, filename);
+		System.out.println(userHomeFolder);
+		File icsFile = new File(userHomeFolder+"/Desktop/OurCalendarEvents/", filename);
 		FileWriter fileWriter = new FileWriter(icsFile);
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 		
@@ -61,6 +62,10 @@ public static void makeEvent(String eventSummary, String timeStart, String timeE
 
 
 }
+
+
+/*String userHomeFolder = System.getProperty("user.home");
+		File icsFile = new File(userHomeFolder, filename);*/
 
 
 /*WORKING DRAG AND DROP CODE. Remove all other, place into try block.

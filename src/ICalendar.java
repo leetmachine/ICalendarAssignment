@@ -1,5 +1,15 @@
 //TEAM ANDRASTE ICS314 ICALENDAR PROJECT
 //Main, Holds JavaFX interface
+import java.awt.BorderLayout;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+
+import javax.swing.JFileChooser;
+import javax.swing.JSeparator;
+
 import javafx.scene.layout.FlowPane;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -17,6 +27,7 @@ import javafx.geometry.Pos;
 
 public class ICalendar extends Application {
 	
+
 	//application label
 	Label label = new Label("Team Adrastea Event Application");
 	
@@ -81,6 +92,19 @@ public class ICalendar extends Application {
 	//save button
 	Button saveButton = new Button("save");
 	
+	
+	
+	//Select folder with .ics files
+	Label selectLabel = new Label("Click select button to get the files in your folder.");
+	Button selectButton = new Button("Select Items");
+	Label folderLocationLabel = new Label("Folder location below:");
+	static Label folderLabel = new Label("");
+	Button sortItems = new Button("Sort selected Items");
+	
+	
+	
+	
+	
 	//Must leave blank. Only ICalendar.launch() can exist here
 	public static void main(String[] args) {
 		ICalendar.launch();
@@ -93,6 +117,7 @@ public class ICalendar extends Application {
 		BorderPane border = new BorderPane();
 		border.setTop(label);
 		
+		//right Vbox (make event)
 		eventSummary.setMaxWidth(Double.MAX_VALUE);
 			eventSummary.setPromptText("event title");
 		startTime.setMaxWidth(Double.MAX_VALUE);
@@ -107,6 +132,8 @@ public class ICalendar extends Application {
 		classification.setMaxWidth(Double.MAX_VALUE);
 			classification.getSelectionModel().selectFirst();
 		saveButton.setMaxWidth(Double.MAX_VALUE);
+		
+
 		
 		
 		//Dropdowns for start time selector
@@ -144,13 +171,32 @@ public class ICalendar extends Application {
 									saveButton);
 		
 		
-		border.setLeft(fieldsBox);
+		//left Vbox (sort events)
+		selectLabel.setMaxWidth(Double.MAX_VALUE);
+		folderLabel.setMaxWidth(Double.MAX_VALUE); 
+		selectButton.setMaxWidth(Double.MAX_VALUE);
+		sortItems.setMaxWidth(Double.MAX_VALUE);
+		
+		
+		VBox selectBox = new VBox();
+		selectBox.setSpacing(5);
+		selectBox.setPadding(new Insets(10, 10, 10, 20));
+		selectBox.getChildren().addAll(selectLabel, selectButton, folderLocationLabel, folderLabel, sortItems);
+		
+		
+		HBox mainHBox = new HBox();
+		selectBox.setSpacing(5);
+		selectBox.setPadding(new Insets(10, 10, 10, 20));
+		mainHBox.getChildren().addAll(fieldsBox, selectBox);
+		
+		
+		border.setLeft(mainHBox);
 		
 		Scene scene = new Scene(border, 600, 600);
 		scene.setFill(Color.LIGHTGREY);
 		stage.setTitle("ICS314 iCalendar Event Creator");
-		saveButton.setOnAction(new ButtonHandler());
-		
+		saveButton.setOnAction(new SaveButtonHandler());
+		selectButton.setOnAction(new SelectButtonHandler());
 		stage.setScene(scene);
 		stage.show();
 		
@@ -158,7 +204,7 @@ public class ICalendar extends Application {
 	
 	/*BUTTON HANDLER, when "save" is pressed, this gathers all of the data in the fields
 	 runs the converter methods below, and calls the makeEvent method which writes it all to the file*/
-	private class ButtonHandler implements EventHandler<ActionEvent> {
+	private class SaveButtonHandler implements EventHandler<ActionEvent> {
 		public void handle (ActionEvent ae) {
 			if (ae.getSource() == saveButton) {
 				//if saveButton is pressed call the EventCreator method, which will write the file
@@ -176,6 +222,23 @@ public class ICalendar extends Application {
 				//makeEvent will print to the console once the file is written for log.
 				EventCreator.makeEvent(saveEventSummary, saveTimeStart, saveTimeEnd, saveLocation, saveGeoPosition, saveClassification);
 				
+			}
+		}
+	}
+	
+	private class SelectButtonHandler implements EventHandler<ActionEvent> {
+		public void handle (ActionEvent ae) {
+			if (ae.getSource() == selectButton) {
+				//what happens when the select button is pressed?
+				//initialize JFileChooser to prompt user to select a folder.
+				System.out.println("Select Button Pressed");
+
+				SelectedFolder.Chooser();
+				System.out.println("Chooser ran");
+				
+				
+				//set folderLabel to directory path (helps to store the path in a string format so we can use getText()
+				//send folder path to eventSorter, which will read in all of the files and do the sort work. 
 			}
 		}
 	}
