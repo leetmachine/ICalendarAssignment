@@ -2,6 +2,7 @@
 //Main, Holds JavaFX interface
 import java.awt.BorderLayout;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -192,7 +193,7 @@ public class ICalendar extends Application {
 		
 		border.setLeft(mainHBox);
 		
-		Scene scene = new Scene(border, 600, 600);
+		Scene scene = new Scene(border, 800, 600);
 		scene.setFill(Color.LIGHTGREY);
 		stage.setTitle("ICS314 iCalendar Event Creator");
 		saveButton.setOnAction(new SaveButtonHandler());
@@ -233,7 +234,12 @@ public class ICalendar extends Application {
 				//initialize JFileChooser to prompt user to select a folder.
 				System.out.println("Select Button Pressed");
 
-				SelectedFolder.Chooser();
+				try {
+					SelectedFolder.Chooser();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				System.out.println("Chooser ran");
 				
 				

@@ -37,7 +37,7 @@ public static void makeEvent(String eventSummary, String timeStart, String timeE
 		
 		//check for geoPosition text
 		if (geoPosition != "") {
-				bufferedWriter.write("GEO:"+ geoPosition + "\n");	
+				bufferedWriter.write("GEO:"+ geoPosition + "\n");
 		}
 		//Place great circle distance below after COMMENT:
 		bufferedWriter.write("COMMENT:\n");
