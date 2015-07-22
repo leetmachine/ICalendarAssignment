@@ -1,6 +1,10 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -11,15 +15,16 @@ public class SelectedFolder {
 
 	String[] files;
 	int n = 0;
-	static EventFile[] events;
+	static List<EventFile> events = new ArrayList<EventFile>();
 	static String eventSummary;
 	static String dtStartTime;
 	String geo;
 	static String latitude;
 	static String longitude;
+	static int startTime = 0;
 	
 
-	public static void Chooser() throws FileNotFoundException {
+	public static List<EventFile> Chooser() throws FileNotFoundException {
 		
 		//grabs all files in the folder
 		String fileName;
@@ -66,27 +71,48 @@ public class SelectedFolder {
 			                	if (line.length()>4) {
 				                	String[] geoParts = line.split(":");
 				                	String latLong = geoParts[1];
-				                	String[] latAndLong = line.split(";");
+				                	String[] latAndLong = latLong.split(";");
 				                	latitude = latAndLong[0];
 				                	longitude = latAndLong[1];
 				                	System.out.println(latitude + " " + longitude);
 			                	}
 			                }
-			                
-			                //events[i] = new EventFile(eventSummary, dtStartTime, latitude, longitude);
-			                
+
 			            }
 			            scanner.close();
 	 
 			        } catch (FileNotFoundException e) {
 			            e.printStackTrace();
 			        }
+				 EventFile myEvent = new EventFile(eventSummary, dtStartTime, latitude, longitude );
+				 events.add(myEvent);
+				 
 			 }
-			 
-			 /*for(int i = 0; i< events.length;i++) {
-				 System.out.println(events[i].getEventSummary());
+			 //author Mike Yaworski at stackoverflow.
+			 /*for ( EventFile e: events) {
+				 System.out.println(e.getEventSummary());
+				 System.out.println(e.getEventStartTime());
+				 System.out.println(e.getLatitude());
+				 System.out.println(e.getLongitude());
 			 }*/
 			 
+			 
+			 Collections.sort(events,new startTimeComp());
+			 
+			 return events;
 	}
 
+}
+
+//Author  java2novice.com
+class startTimeComp implements Comparator<EventFile> {
+	@Override
+	public int compare(EventFile e1, EventFile e2) {
+		if(e1.getEventStartTime() > e2.getEventStartTime()) {
+			return 1;
+		
+		}
+		else return -1;
+		
+	}
 }

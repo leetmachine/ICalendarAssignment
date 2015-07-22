@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.JFileChooser;
@@ -28,7 +30,8 @@ import javafx.geometry.Pos;
 
 public class ICalendar extends Application {
 	
-
+	List<EventFile> sortedEvents = new ArrayList<EventFile>();
+	String sortedOrder = "";
 	//application label
 	Label label = new Label("Team Adrastea Event Application");
 	
@@ -97,10 +100,11 @@ public class ICalendar extends Application {
 	
 	//Select folder with .ics files
 	Label selectLabel = new Label("Click select button to get the files in your folder.");
-	Button selectButton = new Button("Select Items");
+	Button selectButton = new Button("Grab Items from Folder");
 	Label folderLocationLabel = new Label("Folder location below:");
 	static Label folderLabel = new Label("");
-	Button sortItems = new Button("Sort selected Items");
+	Label sortLabel = new Label("Sorted Event Entries:");
+	Label sortedLabel = new Label("");
 	
 	
 	
@@ -176,13 +180,14 @@ public class ICalendar extends Application {
 		selectLabel.setMaxWidth(Double.MAX_VALUE);
 		folderLabel.setMaxWidth(Double.MAX_VALUE); 
 		selectButton.setMaxWidth(Double.MAX_VALUE);
-		sortItems.setMaxWidth(Double.MAX_VALUE);
+		sortedLabel.setMaxWidth(Double.MAX_VALUE);
+		sortLabel.setMaxWidth(Double.MAX_VALUE);
 		
 		
 		VBox selectBox = new VBox();
 		selectBox.setSpacing(5);
 		selectBox.setPadding(new Insets(10, 10, 10, 20));
-		selectBox.getChildren().addAll(selectLabel, selectButton, folderLocationLabel, folderLabel, sortItems);
+		selectBox.getChildren().addAll(selectLabel, selectButton, folderLocationLabel, folderLabel, sortLabel, sortedLabel);
 		
 		
 		HBox mainHBox = new HBox();
@@ -235,12 +240,21 @@ public class ICalendar extends Application {
 				System.out.println("Select Button Pressed");
 
 				try {
-					SelectedFolder.Chooser();
+					sortedEvents = SelectedFolder.Chooser();
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.out.println("Chooser ran");
+				System.out.println("Chooser ran!");
+				System.out.println("Sorted List Entries:");
+				for(EventFile e: sortedEvents) {
+					sortedOrder += (e.getEventSummary() + " at " + e.getEventStartTime()+"\n");
+
+					//(e.getEventSummary() + " at " + e.getEventStartTime());
+				}	
+				
+					sortedLabel.setText(sortedOrder);
+				
 				
 				
 				//set folderLabel to directory path (helps to store the path in a string format so we can use getText()
