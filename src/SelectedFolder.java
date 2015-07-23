@@ -23,14 +23,14 @@ public class SelectedFolder {
 	static String longitude;
 	static int startTime = 0;
 	
+	
 
-	public static List<EventFile> Chooser() throws FileNotFoundException {
+	public static List<EventFile> Chooser(String folderPath) throws FileNotFoundException {
 		
 		//grabs all files in the folder
-		String fileName;
 		String userHomeFolder = System.getProperty("user.home");
-		System.out.println("line27 " + userHomeFolder);
-		ICalendar.folderLabel.setText(userHomeFolder+"/Desktop/OurCalendarEvents/");
+		System.out.println("line27 " + folderPath);
+		ICalendar.folderLabel.setText(folderPath);
 	
 			/* File folder = new File(userHomeFolder+"/Desktop/OurCalendarEvents/");
 			// FileNameExtensionFilter filter = new FileNameExtensionFilter("ics", "text only");
@@ -77,7 +77,6 @@ public class SelectedFolder {
 				                	System.out.println(latitude + " " + longitude);
 			                	}
 			                }
-
 			            }
 			            scanner.close();
 	 
@@ -86,17 +85,8 @@ public class SelectedFolder {
 			        }
 				 EventFile myEvent = new EventFile(eventSummary, dtStartTime, latitude, longitude );
 				 events.add(myEvent);
-				 
-			 }
-			 //author Mike Yaworski at stackoverflow.
-			 /*for ( EventFile e: events) {
-				 System.out.println(e.getEventSummary());
-				 System.out.println(e.getEventStartTime());
-				 System.out.println(e.getLatitude());
-				 System.out.println(e.getLongitude());
-			 }*/
-			 
-			 
+
+			 }			 
 			 Collections.sort(events,new startTimeComp());
 			 
 			 return events;

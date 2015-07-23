@@ -99,8 +99,9 @@ public class ICalendar extends Application {
 	
 	
 	//Select folder with .ics files
-	Label selectLabel = new Label("Click select button to get the files in your folder.");
-	Button selectButton = new Button("Grab Items from Folder");
+	Label selectLabel = new Label("Enter complete folder path:");
+	TextField userFolder = new TextField("Users/keegangladstone/Desktop/OurCalendarEvents/");
+	Button selectButton = new Button("Grab Items from Folder                                                        ");
 	Label folderLocationLabel = new Label("Folder location below:");
 	static Label folderLabel = new Label("");
 	Label sortLabel = new Label("Sorted Event Entries:");
@@ -122,7 +123,7 @@ public class ICalendar extends Application {
 		BorderPane border = new BorderPane();
 		border.setTop(label);
 		
-		//right Vbox (make event)
+		//Left Vbox (make event)
 		eventSummary.setMaxWidth(Double.MAX_VALUE);
 			eventSummary.setPromptText("event title");
 		startTime.setMaxWidth(Double.MAX_VALUE);
@@ -137,6 +138,14 @@ public class ICalendar extends Application {
 		classification.setMaxWidth(Double.MAX_VALUE);
 			classification.getSelectionModel().selectFirst();
 		saveButton.setMaxWidth(Double.MAX_VALUE);
+		
+		//selectBox
+		selectLabel.setMaxWidth(Double.MAX_VALUE);
+		folderLabel.setMaxWidth(Double.MAX_VALUE); 
+		selectButton.setMaxWidth(Double.MAX_VALUE);
+		sortedLabel.setMaxWidth(Double.MAX_VALUE);
+		sortLabel.setMaxWidth(Double.MAX_VALUE);
+		userFolder.setMaxWidth(Double.MAX_VALUE);
 		
 
 		
@@ -163,7 +172,7 @@ public class ICalendar extends Application {
 		
 		VBox fieldsBox = new VBox();
 		fieldsBox.setSpacing(5);
-		fieldsBox.setPadding(new Insets(10, 10, 10, 20));
+		fieldsBox.setPadding(new Insets(10, 10, 10, 10));
 		fieldsBox.getChildren().addAll(labelEventSummary, eventSummary,
 									labelTimeStart, startTimeBox,
 									labelEndTime, endTimeBox,
@@ -177,26 +186,22 @@ public class ICalendar extends Application {
 		
 		
 		//left Vbox (sort events)
-		selectLabel.setMaxWidth(Double.MAX_VALUE);
-		folderLabel.setMaxWidth(Double.MAX_VALUE); 
-		selectButton.setMaxWidth(Double.MAX_VALUE);
-		sortedLabel.setMaxWidth(Double.MAX_VALUE);
-		sortLabel.setMaxWidth(Double.MAX_VALUE);
 		
 		
 		VBox selectBox = new VBox();
 		selectBox.setSpacing(5);
-		selectBox.setPadding(new Insets(10, 10, 10, 20));
-		selectBox.getChildren().addAll(selectLabel, selectButton, folderLocationLabel, folderLabel, sortLabel, sortedLabel);
+		selectBox.setPadding(new Insets(10, 10, 10, 10));
+		selectBox.getChildren().addAll(selectLabel, userFolder,selectButton, folderLocationLabel, folderLabel, sortLabel, sortedLabel);
 		
 		
 		HBox mainHBox = new HBox();
 		selectBox.setSpacing(5);
-		selectBox.setPadding(new Insets(10, 10, 10, 20));
+		selectBox.setPadding(new Insets(10, 10, 10, 10));
 		mainHBox.getChildren().addAll(fieldsBox, selectBox);
 		
 		
 		border.setLeft(mainHBox);
+
 		
 		Scene scene = new Scene(border, 800, 600);
 		scene.setFill(Color.LIGHTGREY);
@@ -240,7 +245,7 @@ public class ICalendar extends Application {
 				System.out.println("Select Button Pressed");
 
 				try {
-					sortedEvents = SelectedFolder.Chooser();
+					sortedEvents = SelectedFolder.Chooser(userFolder.getText());
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -254,9 +259,7 @@ public class ICalendar extends Application {
 				}	
 				
 					sortedLabel.setText(sortedOrder);
-				
-				
-				
+
 				//set folderLabel to directory path (helps to store the path in a string format so we can use getText()
 				//send folder path to eventSorter, which will read in all of the files and do the sort work. 
 			}
