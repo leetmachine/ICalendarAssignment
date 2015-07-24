@@ -16,12 +16,16 @@ public class SelectedFolder {
 	String[] files;
 	int n = 0;
 	static List<EventFile> events = new ArrayList<EventFile>();
+	static String filePath;
 	static String eventSummary;
 	static String dtStartTime;
 	String geo;
 	static String latitude;
 	static String longitude;
 	static int startTime = 0;
+	static String fullStartTime;
+	static String fullEndTime;
+	static String geoPosition;
 	
 	
 
@@ -47,35 +51,22 @@ public class SelectedFolder {
 			 
 			 for(int i =0;i<listOfFiles.length;i++) {
 				 try {
+					 filePath = listOfFiles[i].toString();
+					 System.out.println(filePath);
 			            Scanner scanner = new Scanner(listOfFiles[i]);
 			            while (scanner.hasNextLine()) {
 			                String line = scanner.nextLine();
 			                if (line.contains("SUMMARY:")) {
-			                	System.out.println(line);
-			                	String[] summaryParts = line.split(":");
-			                	eventSummary = summaryParts[1];
-			                	System.out.println(eventSummary);
+			                	lineIsSummary(line);
 			                }
-			                if (line.contains("DTSTART;")) {
-			                	System.out.println(line);
-			                	String[] startParts = line.split(":");
-			                	String startTime = startParts[1];
-			                	System.out.println(startTime);
-			                	String[] moreStartParts = startTime.split("T");
-			                	 dtStartTime = moreStartParts[1];
-			                	System.out.println(dtStartTime);
+			                else if (line.contains("DTSTART;")) {
+			                	lineIsStart(line);
 			                }
-			                if (line.contains("GEO:")) {
-			                	System.out.println(line);
-			                	//handles exception for GEO: not existing
-			                	if (line.length()>4) {
-				                	String[] geoParts = line.split(":");
-				                	String latLong = geoParts[1];
-				                	String[] latAndLong = latLong.split(";");
-				                	latitude = latAndLong[0];
-				                	longitude = latAndLong[1];
-				                	System.out.println(latitude + " " + longitude);
-			                	}
+			                else if (line.contains("DTEND;")) {
+			                	lineIsEnd(line);
+			                }
+			                else if (line.contains("GEO:")) {
+			                	lineIsGeo(line);
 			                }
 			            }
 			            scanner.close();
@@ -83,15 +74,63 @@ public class SelectedFolder {
 			        } catch (FileNotFoundException e) {
 			            e.printStackTrace();
 			        }
-				 EventFile myEvent = new EventFile(eventSummary, dtStartTime, latitude, longitude );
+				 //needs comment, fullEndTime,
+				 EventFile myEvent = new EventFile(filePath, eventSummary, dtStartTime, latitude, longitude);
 				 events.add(myEvent);
 
 			 }			 
 			 Collections.sort(events,new startTimeComp());
 			 
+			 try {
+				writeComment.writeToComment(events);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 
 			 return events;
 	}
 
+	public static void lineIsSummary(String line) {
+		System.out.println(line);
+    	String[] summaryParts = line.split(":");
+    	eventSummary = summaryParts[1];
+    	System.out.println(eventSummary);
+	}
+	
+	public static void lineIsStart(String line) {
+		System.out.println(line);
+    	String[] startParts = line.split(":");
+    	String[] startParts2 = line.split(";");
+    	fullStartTime = startParts2[1];
+    	System.out.println("here is tzid: "+fullStartTime);
+    	String startTime = startParts[1];
+    	System.out.println(startTime);
+    	String[] moreStartParts = startTime.split("T");
+    	 dtStartTime = moreStartParts[1];
+    	System.out.println(dtStartTime);
+	}
+	
+	public static void lineIsEnd(String line) {
+		System.out.println(line);
+		String[] endParts = line.split(";");
+		fullEndTime = endParts[1];
+	}
+	
+	public static void lineIsGeo(String line) {
+		System.out.println(line);
+    	//handles exception for GEO: not existing
+    	if (line.length()>4) {
+        	String[] geoParts = line.split(":");
+        	String latLong = geoParts[1];
+        	String[] latAndLong = latLong.split(";");
+        	latitude = latAndLong[0];
+        	longitude = latAndLong[1];
+        	System.out.println(latitude + " " + longitude);
+        	geoPosition = latitude + ";" + longitude;
+    	}
+	}
+	
 }
 
 //Author  java2novice.com

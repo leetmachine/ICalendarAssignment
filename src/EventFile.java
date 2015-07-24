@@ -2,19 +2,43 @@
 
 public class EventFile {	
 
+String filePath = "";
+
+
+
+public String getFilePath() {
+	return filePath;
+}
+
+public void setFilePath(String filePath) {
+	this.filePath = filePath;
+}
+
 String eventSummary = "";
 int eventStartTime;
+String fullStartTime = "";
+String fullEndTime = "";
 double latitude;
 double longitude;
+String geoPosition;
+String comment;
 
 
+
+public String getComment() {
+	return comment;
+}
+
+public void setComment(String comment) {
+	this.comment = comment;
+}
 
 public EventFile() {
 }
 
-public EventFile(String eventSummary, String eventStartTime, String latitude,
-		String longitude) {
+public EventFile(String filePath, String eventSummary,String eventStartTime, String latitude, String longitude) {
 	super();
+	this.filePath = filePath;
 	this.eventSummary = eventSummary;
 	this.eventStartTime = Integer.parseInt(eventStartTime, 10);
 	this.latitude = Double.parseDouble(latitude);

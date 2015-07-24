@@ -240,8 +240,8 @@ public class ICalendar extends Application {
 	private class SelectButtonHandler implements EventHandler<ActionEvent> {
 		public void handle (ActionEvent ae) {
 			if (ae.getSource() == selectButton) {
-				//what happens when the select button is pressed?
-				//initialize JFileChooser to prompt user to select a folder.
+
+				//SelectedFolder.chooser()
 				System.out.println("Select Button Pressed");
 
 				try {
@@ -252,13 +252,24 @@ public class ICalendar extends Application {
 				}
 				System.out.println("Chooser ran!");
 				System.out.println("Sorted List Entries:");
+				sortedOrder = "";
 				for(EventFile e: sortedEvents) {
-					sortedOrder += (e.getEventSummary() + " at " + e.getEventStartTime()+"\n");
+					
+					
+					
+					if(e.comment == null) {
+						sortedOrder += (e.getEventSummary() + " at " + e.getEventStartTime() + "\n");
+					}
+					
+					else {
+						String formattedDistance = String.format(e.comment, 2);
+						sortedOrder += (e.getEventSummary() + " at " + e.getEventStartTime()+ " and is "+ e.comment + " miles away from next event.\n");
+					}
 
-					//(e.getEventSummary() + " at " + e.getEventStartTime());
 				}	
-				
+					//sets the label on the GUI.
 					sortedLabel.setText(sortedOrder);
+					
 
 				//set folderLabel to directory path (helps to store the path in a string format so we can use getText()
 				//send folder path to eventSorter, which will read in all of the files and do the sort work. 
