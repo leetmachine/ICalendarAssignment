@@ -107,7 +107,7 @@ public class SelectedFolder {
     	String startTime = startParts[1];
     	System.out.println(startTime);
     	String[] moreStartParts = startTime.split("T");
-    	 dtStartTime = moreStartParts[1];
+    	 dtStartTime = moreStartParts[1].substring(0, 4);
     	System.out.println(dtStartTime);
 	}
 	

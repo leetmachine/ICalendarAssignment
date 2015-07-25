@@ -1,19 +1,8 @@
 //TEAM ANDRASTE ICS314 ICALENDAR PROJECT
 //Main, Holds JavaFX interface
-import java.awt.BorderLayout;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.swing.JFileChooser;
-import javax.swing.JSeparator;
-
-import javafx.scene.layout.FlowPane;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -25,7 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.event.*;
-import javafx.geometry.Pos;
 
 
 public class ICalendar extends Application {
@@ -262,7 +250,6 @@ public class ICalendar extends Application {
 					}
 					
 					else {
-						String formattedDistance = String.format(e.comment, 2);
 						sortedOrder += (e.getEventSummary() + " at " + e.getEventStartTime()+ " and is "+ e.comment + " miles away from next event.\n");
 					}
 
