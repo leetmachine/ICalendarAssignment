@@ -34,7 +34,6 @@ public class SelectedFolder {
 		//grabs all files in the folder
 		String userHomeFolder = System.getProperty("user.home");
 		System.out.println("line27 " + folderPath);
-		ICalendar.folderLabel.setText(folderPath);
 	
 			/* File folder = new File(userHomeFolder+"/Desktop/OurCalendarEvents/");
 			// FileNameExtensionFilter filter = new FileNameExtensionFilter("ics", "text only");
@@ -128,6 +127,10 @@ public class SelectedFolder {
         	longitude = latAndLong[1];
         	System.out.println(latitude + " " + longitude);
         	geoPosition = latitude + ";" + longitude;
+    	}
+    	else {
+    		latitude = "-1.0";
+    		longitude = "-1.0";
     	}
 	}
 	

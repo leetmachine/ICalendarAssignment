@@ -28,6 +28,12 @@ public static void writeToComment(List<EventFile> events) {
 	System.out.println(events.get(i).eventSummary + " geo coordinates are " + lat1 + " " + long1);
 	System.out.println(events.get(i+1).eventSummary + " geo coordinates are " + lat2 + " " + long2);
 	
+	
+	if(lat1 == -1.0 && long1 == -1.0 || lat2 == -1.0 && long2 == -1.0) {
+		System.out.println("Latitude and Longitude not specified");
+	}
+	
+	else {
 	//compute distance and parse to String distance
 	computedDistance = GreatCircle.distance(lat1, long1, lat2, long2);
 	distance = Double.toString(computedDistance);
@@ -79,6 +85,7 @@ public static void writeToComment(List<EventFile> events) {
 		} 
 	
 	//while loop ends and continues to n+1 compare n+2
+	}
 	}
 
 	

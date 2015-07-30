@@ -3,6 +3,7 @@
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -18,6 +19,9 @@ import javafx.event.*;
 
 public class ICalendar extends Application {
 	
+	int startTime = 0;
+	int endTime = 0;
+	
 	List<EventFile> sortedEvents = new ArrayList<EventFile>();
 	String sortedOrder = "";
 	//application label
@@ -28,10 +32,20 @@ public class ICalendar extends Application {
 	TextField eventSummary = new TextField();
 	
 	//Start time of event selector
-	TextField startTime = new TextField("");
-	Label labelTimeStart = new Label("Enter 4-digit start time and select the period and the timezone");
-	/*ChoiceBox timeStartBox = new ChoiceBox(FXCollections.observableArrayList(
-			"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));*/
+	//TextField startTime = new TextField("");
+	Label labelTimeStart = new Label("hours/minutes/Timezone");
+	Label enterStartTime = new Label("Enter Start Time:");
+	
+	ChoiceBox<String> timeStartBox = new ChoiceBox<String>(FXCollections.observableArrayList(
+			"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));
+	
+
+	ChoiceBox<String> timeStartMinutesBox = new ChoiceBox<String>(FXCollections.observableArrayList(
+			"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22",
+			"23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44",
+			"45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"));
+	
+	
 	ChoiceBox<String> periodStartBox = new ChoiceBox<String>(FXCollections.observableArrayList(
 			"am","pm"));
 	ChoiceBox<String> timezoneBox = new ChoiceBox<String>(FXCollections.observableArrayList(
@@ -39,12 +53,18 @@ public class ICalendar extends Application {
 	
 	
 	//End time of event	selector
-	Label labelEndTime = new Label("Enter 4-digit end time and select the period");
-	TextField endTime = new TextField("");
-	/*ChoiceBox timeEndBox = new ChoiceBox(FXCollections.observableArrayList(
-			"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));*/
+	Label enterEndTime = new Label("Enter End Time:");
+	Label labelTimeEnd = new Label("hours/minutes");
+	
+	ChoiceBox<String> timeEndBox = new ChoiceBox<String>(FXCollections.observableArrayList(
+			"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));
 	ChoiceBox<String> periodEndBox = new ChoiceBox<String>(FXCollections.observableArrayList(
 			"am","pm"));
+	
+	ChoiceBox<String> timeEndMinutesBox = new ChoiceBox<String>(FXCollections.observableArrayList(
+			"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22",
+			"23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44",
+			"45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"));
 	
 	//Start Date of event
 	Label labelDateStart = new Label("Select start month and day, enter year");
@@ -83,14 +103,14 @@ public class ICalendar extends Application {
 
 	//save button
 	Button saveButton = new Button("save");
+	Label errorLabel = new Label("");
 	
 	
 	
 	//Select folder with .ics files
 	Label selectLabel = new Label("Enter complete folder path:");
 	TextField userFolder = new TextField("Users/keegangladstone/Desktop/OurCalendarEvents/");
-	Button selectButton = new Button("Grab Items from Folder                                                        ");
-	Label folderLocationLabel = new Label("Folder location below:");
+	Button selectButton = new Button("Grab Items from Folder");
 	static Label folderLabel = new Label("");
 	Label sortLabel = new Label("Sorted Event Entries:");
 	Label sortedLabel = new Label("");
@@ -114,10 +134,35 @@ public class ICalendar extends Application {
 		//Left Vbox (make event)
 		eventSummary.setMaxWidth(Double.MAX_VALUE);
 			eventSummary.setPromptText("event title");
-		startTime.setMaxWidth(Double.MAX_VALUE);
-			startTime.setPromptText("0000");
-		endTime.setMaxWidth(Double.MAX_VALUE);
-			endTime.setPromptText("0000");
+		timeStartBox.setMaxWidth(Double.MAX_VALUE);
+		timeStartBox.setValue("12");
+		timeStartMinutesBox.setMaxWidth(Double.MAX_VALUE);
+		timeStartMinutesBox.setValue("00");
+			labelTimeStart.setMaxWidth(Double.MAX_VALUE);
+		periodStartBox.setMaxWidth(Double.MAX_VALUE);
+		periodStartBox.setValue("am");
+		timezoneBox.setMaxWidth(Double.MAX_VALUE);
+		timezoneBox.setValue("UTC");
+		timeEndBox.setMaxWidth(Double.MAX_VALUE);
+		timeEndBox.setValue("12");
+		timeEndMinutesBox.setMaxWidth(Double.MAX_VALUE);
+		timeEndMinutesBox.setValue("00");
+		periodEndBox.setMaxWidth(Double.MAX_VALUE);
+		periodEndBox.setValue("am");
+			labelTimeEnd.setMaxWidth(Double.MAX_VALUE);
+			
+		monthStartBox.setMaxWidth(Double.MAX_VALUE);
+		monthStartBox.setValue("01");
+		dayStartBox.setMaxWidth(Double.MAX_VALUE);
+		dayStartBox.setValue("01");
+		startYear.setMaxWidth(Double.MAX_VALUE);
+		startYear.setText("2015");
+		monthEndBox.setMaxWidth(Double.MAX_VALUE);
+		monthEndBox.setValue("01");
+		dayEndBox.setMaxWidth(Double.MAX_VALUE);
+		dayEndBox.setValue("01");
+		endYear.setMaxWidth(Double.MAX_VALUE);
+		endYear.setText("2015");
 		location.setMaxWidth(Double.MAX_VALUE);
 			location.setPromptText("location");
 		optional.setMaxWidth(Double.MAX_VALUE);
@@ -140,12 +185,12 @@ public class ICalendar extends Application {
 		
 		//Dropdowns for start time selector
 		HBox startTimeBox = new HBox();
-		startTimeBox.getChildren().addAll(startTime, periodStartBox, timezoneBox);
+		startTimeBox.getChildren().addAll(timeStartBox, timeStartMinutesBox, periodStartBox, timezoneBox);
 		
 		
 		//dropdowns for end time selector
 				HBox endTimeBox = new HBox();
-				endTimeBox.getChildren().addAll(endTime, periodEndBox);
+				endTimeBox.getChildren().addAll(timeEndBox, timeEndMinutesBox, periodEndBox);
 		
 				
 		//Dropdowns for start date selector
@@ -162,24 +207,24 @@ public class ICalendar extends Application {
 		fieldsBox.setSpacing(5);
 		fieldsBox.setPadding(new Insets(10, 10, 10, 10));
 		fieldsBox.getChildren().addAll(labelEventSummary, eventSummary,
-									labelTimeStart, startTimeBox,
-									labelEndTime, endTimeBox,
+									 enterStartTime, labelTimeStart, startTimeBox,
+									 labelTimeEnd, endTimeBox,
 									labelDateStart, startDateBox,
 									labelDateEnd, endDateBox, 
 									labelLocation, location,
 									optional, 
 									labelGeoPosition, geoPosition,
 									labelClassification, classification, 
-									saveButton);
+									saveButton, errorLabel);
 		
+		
+
 		
 		//left Vbox (sort events)
-		
-		
 		VBox selectBox = new VBox();
 		selectBox.setSpacing(5);
 		selectBox.setPadding(new Insets(10, 10, 10, 10));
-		selectBox.getChildren().addAll(selectLabel, userFolder,selectButton, folderLocationLabel, folderLabel, sortLabel, sortedLabel);
+		selectBox.getChildren().addAll(selectLabel, userFolder,selectButton, folderLabel, sortLabel, sortedLabel);
 		
 		
 		HBox mainHBox = new HBox();
@@ -206,21 +251,21 @@ public class ICalendar extends Application {
 	private class SaveButtonHandler implements EventHandler<ActionEvent> {
 		public void handle (ActionEvent ae) {
 			if (ae.getSource() == saveButton) {
-				//if saveButton is pressed call the EventCreator method, which will write the file
 				String saveEventSummary = eventSummary.getText();
 				String saveTimeStart = StartTimeConverter();
 				String saveTimeEnd = EndTimeConverter();
 				String saveLocation = location.getText();
 				String saveGeoPosition = geoPosition.getText();
 				String saveClassification = classification.getValue();
-				
-
-				
-				
-				//AFtering getting all the fields, throw them into the makeEvent method which writes the file
-				//makeEvent will print to the console once the file is written for log.
+		
+				if(timeCheck() == true) {
+					errorLabel.setText("ERROR! please make sure the end Time is after the start Time.");
+		
+				}
+				else {
+					errorLabel.setText("No Errors.");
 				EventCreator.makeEvent(saveEventSummary, saveTimeStart, saveTimeEnd, saveLocation, saveGeoPosition, saveClassification);
-				
+				}
 			}
 		}
 	}
@@ -264,20 +309,34 @@ public class ICalendar extends Application {
 		}
 	}
 	
+	private boolean timeCheck(){
+		if(startTime > endTime) {
+			return true;
+		}
+		else return false;
+	}
+	
 	//converts start time to DTSTART format
 	private String StartTimeConverter() {
 		String saveTZID = timezoneConverter();
-		 String date = startYear.getText() + (String) monthStartBox.getValue() + (String) dayStartBox.getValue(); 
-		 String hour = startTime.getText();
+		 String date = startYear.getText() +monthStartBox.getValue() +dayStartBox.getValue(); 
+		 String hour = timeStartBox.getValue();
+		 String minutes = timeStartMinutesBox.getValue();
+		 
 		 
 		 if (periodStartBox.getValue() == "pm") {
 			 System.out.println("period start box if-statement entered.");
-			 int intHour = Integer.parseInt(hour) + 1200;
+			 int intHour = Integer.parseInt(hour) + 12;
 			 System.out.println("hour changed to" + intHour);
 			 hour = Integer.toString(intHour);
 		 }
-		 	
-		 String time = ("TZID="+ saveTZID + date + "T" + hour + "00");
+		 else if (periodStartBox.getValue() == "am" && hour == "12" ) {
+			 hour ="0000";
+		 }
+		 
+		 startTime = Integer.parseInt(hour + minutes);
+		 System.out.println("Start Time is: " +startTime);
+		 String time = ("TZID="+ saveTZID + date + "T" + hour + minutes + "00");
 		 System.out.println(time);
 			return time;
 	}
@@ -287,16 +346,23 @@ public class ICalendar extends Application {
 	//converts end time to DTEND format
 	private String EndTimeConverter() {
 		String saveTZID = timezoneConverter();
-		String date = endYear.getText() + (String) monthEndBox.getValue() + (String) dayEndBox.getValue(); 
-		 String hour = endTime.getText();
+		String date = endYear.getText() +monthEndBox.getValue() +dayEndBox.getValue(); 
+		 String hour = timeEndBox.getValue();
+		 String minutes = timeEndMinutesBox.getValue();
 		 
 		 if (periodEndBox.getValue() == "pm") {
 			 System.out.println("period end box if-statement entered.");
-			 int intHour = Integer.parseInt(hour) + 1200;
+			 int intHour = Integer.parseInt(hour) + 12;
 			 System.out.println("hour changed to" + intHour);
 			 hour = Integer.toString(intHour);
 		 }
-		 String time = ("TZID="+ saveTZID +date + "T" + hour + "00");
+		 else if (periodEndBox.getValue() == "am" && hour == "12" ) {
+			 hour ="0000";
+		 }
+		 
+		 endTime = Integer.parseInt(hour + minutes);
+		 System.out.println("endTime is : " +endTime);
+		 String time = ("TZID="+ saveTZID +date + "T" + hour + minutes + "00");
 		 System.out.println(time);
 			return time;
 	}
@@ -327,19 +393,4 @@ public class ICalendar extends Application {
 		System.out.println(tzid);
 		return tzid;
 	}
-	
-	
-	
-	
-	
-
 }
-
-
-/*// TODO Auto-generated method stub
-Scanner input = new Scanner(System.in);
-
-System.out.println("iCal .ics file creator \n");
-
-//call to prompt user for new event
-EventCreator.makeEvent();*/
