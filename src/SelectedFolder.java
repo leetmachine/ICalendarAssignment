@@ -93,13 +93,21 @@ public class SelectedFolder {
 	public static void lineIsSummary(String line) {
 		System.out.println(line);
     	String[] summaryParts = line.split(":");
-    	eventSummary = summaryParts[1];
+    	System.out.println(summaryParts[0]);
+    	try {
+    		eventSummary = summaryParts[1];
+    	}
+    	catch (IndexOutOfBoundsException ie){
+    		eventSummary = "";
+    	}
     	System.out.println(eventSummary);
 	}
 	
 	public static void lineIsStart(String line) {
 		System.out.println(line);
-    	String[] startParts = line.split(":");
+    	try {
+    		String[] startParts = line.split(":");
+    	
     	String[] startParts2 = line.split(";");
     	fullStartTime = startParts2[1];
     	System.out.println("here is tzid: "+fullStartTime);
@@ -108,30 +116,43 @@ public class SelectedFolder {
     	String[] moreStartParts = startTime.split("T");
     	 dtStartTime = moreStartParts[1].substring(0, 4);
     	System.out.println(dtStartTime);
+		}
+    	catch (IndexOutOfBoundsException ie) {
+    		dtStartTime = "";
+    	}
 	}
 	
 	public static void lineIsEnd(String line) {
-		System.out.println(line);
+		try {System.out.println(line);
 		String[] endParts = line.split(";");
 		fullEndTime = endParts[1];
+		}
+		catch (IndexOutOfBoundsException ie) {
+			fullEndTime = "";
+		}
 	}
 	
 	public static void lineIsGeo(String line) {
 		System.out.println(line);
     	//handles exception for GEO: not existing
-    	if (line.length()>4) {
-        	String[] geoParts = line.split(":");
-        	String latLong = geoParts[1];
-        	String[] latAndLong = latLong.split(";");
-        	latitude = latAndLong[0];
-        	longitude = latAndLong[1];
-        	System.out.println(latitude + " " + longitude);
-        	geoPosition = latitude + ";" + longitude;
-    	}
-    	else {
-    		latitude = "-1.0";
-    		longitude = "-1.0";
-    	}
+	    	try {
+	    		if (line.length()>4) {
+	        	String[] geoParts = line.split(":");
+	        	String latLong = geoParts[1];
+	        	String[] latAndLong = latLong.split(";");
+	        	latitude = latAndLong[0];
+	        	longitude = latAndLong[1];
+	        	System.out.println(latitude + " " + longitude);
+	        	geoPosition = latitude + ";" + longitude;
+	    		}
+		    	else {
+		    		latitude = "-1.0";
+		    		longitude = "-1.0";
+		    	}
+	    	}catch (IndexOutOfBoundsException ie) {
+	    		latitude = "";
+	    		longitude = "";
+	    	}
 	}
 	
 }

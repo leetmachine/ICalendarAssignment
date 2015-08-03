@@ -21,6 +21,16 @@ public class ICalendar extends Application {
 	
 	int startTime = 0;
 	int endTime = 0;
+	String timezoneCode = "";
+	String dateStart = "";
+	String hourStart = "";
+	String minuteStart = "";
+	String dateEnd  = "";
+	String hourEnd = "";
+	String minuteEnd = "";
+	String saveTZID = "";
+	String periodStartBoxText = "";
+	String periodEndBoxText = "";
 	
 	List<EventFile> sortedEvents = new ArrayList<EventFile>();
 	String sortedOrder = "";
@@ -108,10 +118,12 @@ public class ICalendar extends Application {
 	
 	
 	//Select folder with .ics files
-	Label selectLabel = new Label("Enter complete folder path:");
+	Label selectLabel = new Label("Enter complete folder path:                                    ");
 	TextField userFolder = new TextField("Users/keegangladstone/Desktop/OurCalendarEvents/");
 	Button selectButton = new Button("Grab Items from Folder");
-	static Label folderLabel = new Label("");
+	
+	//may need to be static
+	//static Label folderLabel = new Label("THIS IS THE folderLabel");
 	Label sortLabel = new Label("Sorted Event Entries:");
 	Label sortedLabel = new Label("");
 	
@@ -174,7 +186,7 @@ public class ICalendar extends Application {
 		
 		//selectBox
 		selectLabel.setMaxWidth(Double.MAX_VALUE);
-		folderLabel.setMaxWidth(Double.MAX_VALUE); 
+		//folderLabel.setMaxWidth(Double.MAX_VALUE); 
 		selectButton.setMaxWidth(Double.MAX_VALUE);
 		sortedLabel.setMaxWidth(Double.MAX_VALUE);
 		sortLabel.setMaxWidth(Double.MAX_VALUE);
@@ -224,7 +236,7 @@ public class ICalendar extends Application {
 		VBox selectBox = new VBox();
 		selectBox.setSpacing(5);
 		selectBox.setPadding(new Insets(10, 10, 10, 10));
-		selectBox.getChildren().addAll(selectLabel, userFolder,selectButton, folderLabel, sortLabel, sortedLabel);
+		selectBox.getChildren().addAll(selectLabel, userFolder,selectButton, sortLabel, sortedLabel);
 		
 		
 		HBox mainHBox = new HBox();
@@ -251,14 +263,27 @@ public class ICalendar extends Application {
 	private class SaveButtonHandler implements EventHandler<ActionEvent> {
 		public void handle (ActionEvent ae) {
 			if (ae.getSource() == saveButton) {
+				timezoneCode = timezoneBox.getValue();
+				saveTZID = timezoneConverter(timezoneCode);
+				 dateStart = startYear.getText() +monthStartBox.getValue() +dayStartBox.getValue(); 
+				 hourStart = timeStartBox.getValue();
+				 minuteStart = timeStartMinutesBox.getValue();
+				 dateEnd = endYear.getText() +monthEndBox.getValue() +dayEndBox.getValue(); 
+				 hourEnd = timeEndBox.getValue();
+				 minuteEnd = timeEndMinutesBox.getValue();
+				 periodStartBoxText = periodStartBox.getValue();
+				 periodEndBoxText = periodEndBox.getValue();
+				
+				
+				
 				String saveEventSummary = eventSummary.getText();
-				String saveTimeStart = StartTimeConverter();
-				String saveTimeEnd = EndTimeConverter();
+				String saveTimeStart = StartTimeConverter(saveTZID, dateStart, hourStart, minuteStart, periodStartBoxText);
+				String saveTimeEnd = EndTimeConverter(saveTZID, dateEnd, hourEnd, minuteEnd, periodEndBoxText);
 				String saveLocation = location.getText();
 				String saveGeoPosition = geoPosition.getText();
 				String saveClassification = classification.getValue();
 		
-				if(timeCheck() == true) {
+				if(timeCheck(startTime, endTime) == true) {
 					errorLabel.setText("ERROR! please make sure the end Time is after the start Time.");
 		
 				}
@@ -309,7 +334,7 @@ public class ICalendar extends Application {
 		}
 	}
 	
-	private boolean timeCheck(){
+	public static boolean timeCheck(int startTime, int endTime){
 		if(startTime > endTime) {
 			return true;
 		}
@@ -317,26 +342,31 @@ public class ICalendar extends Application {
 	}
 	
 	//converts start time to DTSTART format
-	private String StartTimeConverter() {
-		String saveTZID = timezoneConverter();
-		 String date = startYear.getText() +monthStartBox.getValue() +dayStartBox.getValue(); 
-		 String hour = timeStartBox.getValue();
-		 String minutes = timeStartMinutesBox.getValue();
+	public static String StartTimeConverter(String tzid, String day, String hour, String minute, String period) {
+		String saveTZID = tzid;
+		String dateStart = day;
+		String hourStart = hour;
+		String minuteStart = minute;
+		String periodStartBox = period;
 		 
 		 
-		 if (periodStartBox.getValue() == "pm") {
+		if (periodStartBox == "pm" && hourStart == "12") {
+			 System.out.println("Start hour Not Changed, stays " + hourStart);
+		 } 
+		else if (periodStartBox  == "pm") {
 			 System.out.println("period start box if-statement entered.");
-			 int intHour = Integer.parseInt(hour) + 12;
+			 int intHour = Integer.parseInt(hourStart) + 12;
 			 System.out.println("hour changed to" + intHour);
-			 hour = Integer.toString(intHour);
-		 }
-		 else if (periodStartBox.getValue() == "am" && hour == "12" ) {
-			 hour ="0000";
+			 hourStart = Integer.toString(intHour);
 		 }
 		 
-		 startTime = Integer.parseInt(hour + minutes);
+		 else if (periodStartBox == "am" && hourStart == "12" ) {
+			 hourStart ="00";
+		 }
+		 
+		 int startTime = Integer.parseInt(hourStart + minuteStart);
 		 System.out.println("Start Time is: " +startTime);
-		 String time = ("TZID="+ saveTZID + date + "T" + hour + minutes + "00");
+		 String time = ("TZID="+ saveTZID + dateStart + "T" + hourStart + minuteStart + "00");
 		 System.out.println(time);
 			return time;
 	}
@@ -344,33 +374,38 @@ public class ICalendar extends Application {
 	
 	
 	//converts end time to DTEND format
-	private String EndTimeConverter() {
-		String saveTZID = timezoneConverter();
-		String date = endYear.getText() +monthEndBox.getValue() +dayEndBox.getValue(); 
-		 String hour = timeEndBox.getValue();
-		 String minutes = timeEndMinutesBox.getValue();
+	public static String EndTimeConverter(String tzid, String day, String hour, String minute, String period) {
+		String saveTZID = tzid;
+		String dateEnd = day;
+		 String hourEnd = hour;
+		 String minuteEnd = minute;
+		 String periodEndBox = period;
 		 
-		 if (periodEndBox.getValue() == "pm") {
+		 
+		 if (periodEndBox == "pm" && hourEnd == "12") {
+			 System.out.println("End hour Not Changed, stays " + hourEnd);
+		 }
+		 else if (periodEndBox == "pm") {
 			 System.out.println("period end box if-statement entered.");
-			 int intHour = Integer.parseInt(hour) + 12;
+			 int intHour = Integer.parseInt(hourEnd) + 12;
 			 System.out.println("hour changed to" + intHour);
-			 hour = Integer.toString(intHour);
+			 hourEnd = Integer.toString(intHour);
 		 }
-		 else if (periodEndBox.getValue() == "am" && hour == "12" ) {
-			 hour ="0000";
+		 else if (periodEndBox == "am" && hourEnd == "12" ) {
+			 hourEnd ="00";
 		 }
 		 
-		 endTime = Integer.parseInt(hour + minutes);
+		 int endTime = Integer.parseInt(hourEnd + minuteEnd);
 		 System.out.println("endTime is : " +endTime);
-		 String time = ("TZID="+ saveTZID +date + "T" + hour + minutes + "00");
+		 String time = ("TZID="+ saveTZID +dateEnd + "T" + hourEnd + minuteEnd + "00");
 		 System.out.println(time);
 			return time;
 	}
 	
 	
 	//Converts the timezone abreviation into the usable TZID string for the time formatted.
-	private String timezoneConverter() {
-		String timezoneCode = (String) timezoneBox.getValue();
+	public static String timezoneConverter(String timezone) {
+		String timezoneCode = timezone;
 		String tzid = null;
 		
 		switch (timezoneCode) {
